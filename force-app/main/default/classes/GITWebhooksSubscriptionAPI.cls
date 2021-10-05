@@ -3,20 +3,21 @@ global with sharing class GITWebhooksSubscriptionAPI {
 @HttpPost
     global static void HandleNotification()
     {
-        try{
+         try{
             RestRequest request = RestContext.request;
             RestResponse response=RestContext.response;
+
             // fetching the body 
             //get hash value from header
             String hashedval = request.headers.get('X-Hub-Signature-256');
             System.debug('hashedval:'+hashedval);
             Blob bB = request.requestBody; 
             System.debug(bB.toString());
-            Blob hmac = Crypto.generateMac('hmacSHA256',bB, Blob.valueOf('webhooktrial'));
+            /*Blob hmac = Crypto.generateMac('hmacSHA256',bB, Blob.valueOf('webhooktrial'));
             //Blob hmac = Crypto.generateMac('hmacSHA256',Blob.valueOf('test'),  Blob.valueOf('webhooktrial')); 
             String hmacstring = 'sha256='+EncodingUtil.convertToHex(hmac);
             System.debug('hmac:'+EncodingUtil.convertToHex(hmac));
-            if( hashedval == hmacstring){
+            if( hashedval == hmacstring){*/
                 System.debug('Secret value Matched and source can be trusted!');
                 //githubpushdetails pusherdetails = githubpushdetails.parse(bB.toString());
                 //iterate through JSON
@@ -64,12 +65,12 @@ global with sharing class GITWebhooksSubscriptionAPI {
                 insert detail;
                 response.statusCode = 200;
                 response.responseBody = Blob.valueOf(JSON.serialize(new SFDCResponse('Success','Processed Successfully')));
-            }
+           /*}
             else{
                 //set response as unauthorized
                 response.statusCode = 401;
                 response.responseBody = Blob.valueOf(JSON.serialize(new SFDCResponse('Failure','Not a valid Sender')));
-            }
+            }*/
         }catch(Exception e){
            System.debug('Exception Happened:'+e.getMessage());     
          }
