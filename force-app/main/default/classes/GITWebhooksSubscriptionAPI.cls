@@ -8,16 +8,16 @@ global with sharing class GITWebhooksSubscriptionAPI {
             RestResponse response=RestContext.response;
             // fetching the body 
             //get hash value from header
-            //String hashedval = request.headers.get('X-Hub-Signature-256');
-            //System.debug('hashedval:'+hashedval);
+            String hashedval = request.headers.get('X-Hub-Signature-256');
+            System.debug('hashedval:'+hashedval);
             Blob bB = request.requestBody; 
             System.debug(bB.toString());
-            //Blob hmac = Crypto.generateMac('hmacSHA256',bB, Blob.valueOf('webhooktrial'));
+            Blob hmac = Crypto.generateMac('hmacSHA256',bB, Blob.valueOf('webhooktrial'));
             //Blob hmac = Crypto.generateMac('hmacSHA256',Blob.valueOf('test'),  Blob.valueOf('webhooktrial')); 
-            //String hmacstring = 'sha256='+EncodingUtil.convertToHex(hmac);
-            //System.debug('hmac:'+EncodingUtil.convertToHex(hmac));
-            //if( hashedval == hmacstring){
-              //  System.debug('Secret value Matched and source can be trusted!');
+            String hmacstring = 'sha256='+EncodingUtil.convertToHex(hmac);
+            System.debug('hmac:'+EncodingUtil.convertToHex(hmac));
+            if( hashedval == hmacstring){
+                System.debug('Secret value Matched and source can be trusted!');
                 //githubpushdetails pusherdetails = githubpushdetails.parse(bB.toString());
                 //iterate through JSON
                 JSONParser parser = JSON.createParser(request.requestBody.toString());
@@ -49,7 +49,7 @@ global with sharing class GITWebhooksSubscriptionAPI {
                         repo = parser.getText();
                         System.debug(repo); 
                     }
-               // }
+                }
                 //Create GitHub_Push_Details__c based on received details
                 GitHub_Push_Details__c detail = new GitHub_Push_Details__c();
                 detail.Committer_Name__c = ps!=null?ps.name:'';
