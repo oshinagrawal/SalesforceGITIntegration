@@ -1,7 +1,7 @@
 @RestResource(urlMapping='/api/Webhooks/incoming/pushDetails/*')
 global with sharing class GITWebhooksSubscriptionAPI {
 @HttpPost
-    global static void HandleNotification()
+    global static void HandleInsert()
     {
          try{
             RestRequest request = RestContext.request;
@@ -14,12 +14,10 @@ global with sharing class GITWebhooksSubscriptionAPI {
             Blob bB = request.requestBody; 
             System.debug(bB.toString());
             Blob hmac = Crypto.generateMac('hmacSHA256',bB, Blob.valueOf('test'));
-            //Blob hmac = Crypto.generateMac('hmacSHA256',Blob.valueOf('test'),  Blob.valueOf('webhooktrial')); 
             String hmacstring = 'sha256='+EncodingUtil.convertToHex(hmac);
             System.debug('hmac:'+EncodingUtil.convertToHex(hmac));
             if( hashedval == hmacstring){
                 System.debug('Secret value Matched and source can be trusted!');
-                //githubpushdetails pusherdetails = githubpushdetails.parse(bB.toString());
                 //iterate through JSON
                 JSONParser parser = JSON.createParser(request.requestBody.toString());
                 pusher ps;
