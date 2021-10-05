@@ -13,11 +13,11 @@ global with sharing class GITWebhooksSubscriptionAPI {
             System.debug('hashedval:'+hashedval);
             Blob bB = request.requestBody; 
             System.debug(bB.toString());
-            /*Blob hmac = Crypto.generateMac('hmacSHA256',bB, Blob.valueOf('webhooktrial'));
+            Blob hmac = Crypto.generateMac('hmacSHA256',bB, Blob.valueOf('test'));
             //Blob hmac = Crypto.generateMac('hmacSHA256',Blob.valueOf('test'),  Blob.valueOf('webhooktrial')); 
             String hmacstring = 'sha256='+EncodingUtil.convertToHex(hmac);
             System.debug('hmac:'+EncodingUtil.convertToHex(hmac));
-            if( hashedval == hmacstring){*/
+            if( hashedval == hmacstring){
                 System.debug('Secret value Matched and source can be trusted!');
                 //githubpushdetails pusherdetails = githubpushdetails.parse(bB.toString());
                 //iterate through JSON
@@ -26,7 +26,7 @@ global with sharing class GITWebhooksSubscriptionAPI {
                 head_commit hc;
                 String repo;
                 while (parser.nextToken() != null) {
-                    //System.debug('Inside parser'+parser.getText());
+                    System.debug('Inside parser'+parser.getText());
                     if (parser.getText() == 'pusher') 
                     {
                         System.debug('Inside pusher');
@@ -65,12 +65,12 @@ global with sharing class GITWebhooksSubscriptionAPI {
                 insert detail;
                 response.statusCode = 200;
                 response.responseBody = Blob.valueOf(JSON.serialize(new SFDCResponse('Success','Processed Successfully')));
-           /*}
+           }
             else{
                 //set response as unauthorized
                 response.statusCode = 401;
                 response.responseBody = Blob.valueOf(JSON.serialize(new SFDCResponse('Failure','Not a valid Sender')));
-            }*/
+            }
         }catch(Exception e){
            System.debug('Exception Happened:'+e.getMessage());     
          }
